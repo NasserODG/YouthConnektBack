@@ -11,8 +11,72 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
+
+/**
+ * @OA\Tag(
+ *     name="Authentification",
+ *     description="Endpoints pour l'Authentification des utilisateurs"
+ * )
+ */
+
 class AuthController extends Controller
 {
+
+
+    /**
+ * @OA\Post(
+ *     path="/api/login",
+ *     tags={"Auth"},
+ *     summary="Connexion de l'utilisateur",
+ *     description="Permet à l'utilisateur de se connecter en fournissant son email et mot de passe.",
+ *     @OA\RequestBody(
+ *         required=true,
+ *         @OA\MediaType(
+ *             mediaType="application/json",
+ *             @OA\Schema(
+ *                 @OA\Property(
+ *                     property="email",
+ *                     description="Adresse email de l'utilisateur",
+ *                     type="string",
+ *                 ),
+ *                 @OA\Property(
+ *                     property="mdp",
+ *                     description="Mot de passe de l'utilisateur",
+ *                     type="string",
+ *                 ),
+ *                 example={
+ *                     "email": "john@example.com",
+ *                     "mdp": "secret"
+ *                 }
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=200,
+ *         description="Connexion réussie",
+ *         @OA\JsonContent(
+ *             @OA\Property(
+ *                 property="token",
+ *                 description="Token d'accès personnel",
+ *                 type="string"
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=422,
+ *         description="Paramètres invalides ou mot de passe incorrect ou utilisateur inexistant",
+ *         @OA\JsonContent(
+ *             @OA\Property(
+ *                 property="message",
+ *                 description="Message d'erreur",
+ *                 type="string"
+ *               )
+ *          )
+ *      ),  
+ * )
+ */
+
+
     public function login (Request $request) {
         $validator = Validator::make($request->all(), [
             'email' => 'required|string|email|max:255',
@@ -37,6 +101,67 @@ class AuthController extends Controller
             return response($response, 422);
         }
     }
+
+
+    /**
+ * @OA\Post(
+ *     path="/api/register",
+ *     tags={"Auth"},
+ *     summary="Inscription d'un nouvel utilisateur",
+ *     description="Permet à un nouvel utilisateur de s'inscrire en fournissant ses informations.",
+ *     @OA\RequestBody(
+ *         required=true,
+ *         @OA\MediaType(
+ *             mediaType="application/json",
+ *             @OA\Schema(
+ *                 @OA\Property(
+ *                     property="nom",
+ *                     description="Nom de l'utilisateur",
+ *                     type="string",
+ *                 ),
+ *                 @OA\Property(
+ *                     property="email",
+ *                     description="Adresse email de l'utilisateur",
+ *                     type="string",
+ *                 ),
+ *                 @OA\Property(
+ *                     property="mdp",
+ *                     description="Mot de passe de l'utilisateur",
+ *                     type="string",
+ *                 ),
+ *                 example={
+ *                     "nom": "John Doe",
+ *                     "email": "john@example.com",
+ *                     "mdp": "secret"
+ *                 }
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=200,
+ *         description="Inscription réussie",
+ *         @OA\JsonContent(
+ *             @OA\Property(
+ *                 property="token",
+ *                 description="Token d'accès personnel",
+ *                 type="string"
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=422,
+ *         description="Paramètres invalides",
+ *         @OA\JsonContent(
+ *             @OA\Property(
+ *                 property="errors",
+ *                 description="Liste des erreurs de validation",
+ *                 type="array",
+ *                 @OA\Items(type="string")
+ *             )
+ *         )
+ *     )
+ * )
+ */
     
 
     public function register (Request $request) {
@@ -56,6 +181,40 @@ class AuthController extends Controller
         $response = ['token' => $token];
         return response($response, 200);
     }
+
+
+
+    /**
+ * @OA\Post(
+ *     path="/api/logout",
+ *     tags={"Auth"},
+ *     summary="Déconnexion de l'utilisateur",
+ *     description="Permet à un utilisateur connecté de se déconnecter.",
+ *     security={{"Bearer": {}}},
+ *     @OA\Response(
+ *         response=200,
+ *         description="Déconnexion réussie",
+ *         @OA\JsonContent(
+ *             @OA\Property(
+ *                 property="message",
+ *                 description="Message de confirmation",
+ *                 type="string"
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=401,
+ *         description="Non autorisé",
+ *         @OA\JsonContent(
+ *             @OA\Property(
+ *                 property="message",
+ *                 description="Message d'erreur",
+ *                 type="string"
+ *             )
+ *         )
+ *     )
+ * )
+ */
 
 
     public function logout (Request $request) {
