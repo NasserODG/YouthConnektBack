@@ -21,6 +21,8 @@ class Kernel extends HttpKernel
         \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
         \App\Http\Middleware\TrimStrings::class,
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
+        \App\Http\Middleware\ForceJsonResponse::class,
+        \App\Http\Middleware\Cors::class,
     ];
 
     /**
@@ -65,5 +67,7 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'auth:api' => \App\Http\Middleware\Authenticate::class,
+        'json.response' => \App\Http\Middleware\ForceJsonResponse::class,
+        'cors' => \App\Http\Middleware\Cors::class,
     ];
 }

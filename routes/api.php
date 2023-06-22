@@ -15,6 +15,14 @@ use App\Http\Controllers\AuthController;
 |
 */
 
-Route::post('/login', [AuthController::class, 'login']);
-Route::post('/register', [AuthController::class, 'register']);
-Route::post('/logout', [AuthController::class, 'logout']);
+Route::group(['middleware' => ['cors', 'json.response']], function () {
+    // Route::post('/login', 'Auth\AuthController@login')->name('login.api');
+    // Route::post('/register','Auth\AuthController@register')->name('register.api');
+    // Route::post('/logout', 'Auth\AuthController@logout')->name('logout.api');
+
+    Route::post('/login', [AuthController::class, 'login']);
+    Route::post('/register', [AuthController::class, 'register']);
+    Route::post('/logout', [AuthController::class, 'logout']);
+});
+
+
