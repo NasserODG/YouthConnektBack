@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\RessourcesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,7 +23,17 @@ Route::group(['middleware' => ['cors', 'json.response']], function () {
 
     Route::post('/login', [AuthController::class, 'login']);
     Route::post('/register', [AuthController::class, 'register']);
-    Route::post('/logout', [AuthController::class, 'logout']);
+
+    Route::middleware('auth:api')->group(function () {
+        Route::post('/logout', [AuthController::class, 'logout']);
+    });
+
+    Route::get('/ressources', [RessourcesController::class, 'index']);
+    Route::post('/ressources', [RessourcesController::class, 'store']);
+    Route::get('/ressources/{id}', [RessourcesController::class, 'show']);
+    Route::put('/ressources/{id}', [RessourcesController::class, 'update']);
+    Route::delete('/ressources/{id}', [RessourcesController::class, 'destroy']);
+
 });
 
 

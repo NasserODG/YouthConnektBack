@@ -43,4 +43,11 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'mdp' => 'hashed',
     ];
+
+
+    public function ressources()
+{
+    return $this->hasMany(Ressources::class);
+}
+
 }

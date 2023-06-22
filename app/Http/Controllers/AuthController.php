@@ -25,7 +25,7 @@ class AuthController extends Controller
         $user = User::where('email', $request->email)->first();
         if ($user) {
             if (Hash::check($request->mdp, $user->mdp)) {
-                $token = $user->createToken('Laravel Password Grant Client')->accessToken;
+                $token = $user->createToken('Laravel Personal Access Token')->accessToken;
                 $response = ['token' => $token];
                 return response($response, 200);
             } else {
