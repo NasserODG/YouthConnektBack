@@ -150,6 +150,7 @@ class RessourcesController extends Controller
 
         // Supprimer le fichier associé
         Storage::delete($ressource->lien);
+        Storage::delete('public/ressources/' . $ressource->titre);
 
         $ressource->delete();
 
